@@ -9,7 +9,7 @@ A template for protocol master docker compose, it contains working setup for
 * MySQL (with initialization script)
 * Mosquitto (with custom configuration)
 * Postgres (with initialization script)
-* MongoDB
+* MongoDB (4 because don't have a CPU with AVX support....)
 * Redis
 
 ### How to use

@@ -34,7 +34,7 @@ services:
       real_redis_server:
         condition: service_started
   real_mongodb_server:
-    image: mongo:6-jammy
+    image: mongo:4.4.2
     hostname: "real_mongodb_server"
     environment:
       MONGO_INITDB_ROOT_USERNAME: login
