@@ -1,0 +1,245 @@
+{
+  "pluginsDir": "plugins",
+  "logLevel": "INFO",
+  "dataDir": "data",
+  "apiPort": 8081,
+  "plugins": {
+    "report-plugin": {
+      "active": true
+    }
+  },
+  "protocols": {
+    "dns-01": {
+      "protocol": "dns",
+      "port": 53,
+      "childDns": [
+        "8.8.8.8"
+      ],
+      "blocked": [
+      ],
+      "registered": [
+
+      ],
+      "plugins": {
+        "report-plugin": {
+          "active": true
+        },
+        "network-error-plugin": {},
+        "latency-plugin": {
+          "minMs": 50,
+          "maxMs": 5000
+        }
+      }
+    },
+    "redis-01": {
+      "protocol": "redis",
+      "port": 6379,
+      "login": "",
+      "password": "",
+      "timeout": 30,
+      "connectionString": "tcp://real_redis_server:6379",
+      "plugins": {
+        "record-plugin": {
+          "resetConnectionsOnStart": true
+        },
+        "network-error-plugin": {},
+        "replay-plugin": {
+          "resetConnectionsOnStart": true,
+          "respectCallDuration": true
+        },
+        "report-plugin": {
+          "active": true
+        },
+        "publish-plugin": {
+        },
+        "latency-plugin": {
+          "minMs": 50,
+          "maxMs": 5000
+        }
+      }
+    },
+    "mysql-01": {
+      "protocol": "mysql",
+      "port": 3306,
+      "login": "root",
+      "password": "password",
+      "timeout": 30,
+      "connectionString": "jdbc:mysql://real_mysql_server:3306/db",
+      "plugins": {
+        "network-error-plugin": {},
+        "replay-plugin": {
+        },
+        "record-plugin": {
+        },
+        "mock-plugin": {
+          "active": false
+        },
+        "rewrite-plugin": {
+          "active": false
+        },
+        "latency-plugin": {
+          "minMs": 50,
+          "maxMs": 5000
+        }
+      }
+    },
+    "postgres-01": {
+      "protocol": "postgres",
+      "port": 5432,
+      "login": "postgres",
+      "password": "password",
+      "timeout": 30,
+      "connectionString": "jdbc:mysql://real_postgres_server:5432",
+      "plugins": {
+        "network-error-plugin": {},
+        "replay-plugin": {
+        },
+        "record-plugin": {
+        },
+        "mock-plugin": {
+          "active": false
+        },
+        "rewrite-plugin": {
+          "active": false
+        },
+        "latency-plugin": {
+          "minMs": 50,
+          "maxMs": 5000
+        }
+      }
+    },
+    "mqtt-01": {
+      "protocol": "mqtt",
+      "port": 1883,
+      "login": "",
+      "password": "",
+      "timeout": 30,
+      "connectionString": "tcp://real_mqtt_server:1883",
+      "plugins": {
+        "network-error-plugin": {},
+        "publish-plugin": {
+        },
+        "record-plugin": {
+          "resetConnectionsOnStart": true
+        },
+        "replay-plugin": {
+          "resetConnectionsOnStart": true,
+          "respectCallDuration": true
+        },
+        "latency-plugin": {
+          "minMs": 50,
+          "maxMs": 5000
+        }
+      }
+    },
+    "http-01": {
+      "protocol": "http",
+      "http": 80,
+      "https": 443,
+      "proxy": 9000,
+      "ssl": {
+        "der": "resource://certificates/ca.der",
+        "key": "resource://certificates/ca.key",
+        "cname": "C=US,O=Local Development,CN=local.org",
+        "hosts": [
+          "*.google.com",
+          "www.google.com"
+        ]
+      },
+      "plugins": {
+        "latency-plugin": {
+          "target": [
+
+          ],
+          "minMs": 50,
+          "maxMs": 5000
+        },
+        "rate-limit-plugin": {
+          "target": [
+
+          ],
+          "rateLimit": 120,
+          "warningThresholdPercent": 80,
+          "resetTimeWindowSeconds": 60
+        },
+        "sample-http": {
+          "active": true
+        },
+        "error-plugin": {
+          "active": false,
+          "errorCode": 0,
+          "errorMessage": "ERROR",
+          "percentage": 0,
+          "target": [
+
+          ]
+        },
+        "report-plugin": {
+          "active": true
+        },
+        "replay-plugin": {
+          "active": false,
+          "respectCallDuration": true,
+          "target": [
+          ]
+        },
+        "record-plugin": {
+          "active": false,
+          "target": []
+        },
+        "mock-plugin": {
+          "active": false
+        },
+        "rewrite-plugin": {
+          "active": false
+        }
+      }
+    },
+    "amqp-01": {
+      "protocol": "amqp091",
+      "port": 5672,
+      "login": "root",
+      "password": "password",
+      "timeout": 30,
+      "connectionString": "tcp://real_amqp091_server:5672",
+      "plugins": {
+        "network-error-plugin": {},
+        "publish-plugin": {
+        },
+        "record-plugin": {
+          "resetConnectionsOnStart": true
+        },
+        "replay-plugin": {
+          "resetConnectionsOnStart": true,
+          "respectCallDuration": true
+        },
+        "latency-plugin": {
+          "minMs": 50,
+          "maxMs": 5000
+        }
+      }
+    },
+    "mongo-01": {
+      "protocol": "mongodb",
+      "port": 27017,
+      "login": "login",
+      "password": "password",
+      "timeout": 30,
+      "connectionString": "tcp://real_mongodb_server:27017",
+      "plugins": {
+        "network-error-plugin": {},
+        "publish-plugin": {
+        },
+        "record-plugin": {
+        },
+        "replay-plugin": {
+          "respectCallDuration": true
+        },
+        "latency-plugin": {
+          "minMs": 50,
+          "maxMs": 5000
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,98 @@
+
+services:
+  # TPM Application
+  main-tpm:
+    build:
+      context: Tpm/.
+      dockerfile: Dockerfile
+    image: "main-tpm"
+    hostname: "main-tpm"
+    ports:
+      - '35005:5005'  # debug port
+      - '38081:8081'  # admin api port
+      - '30053:53'    # dns proxy port
+      - '36379:6379'  # redis proxy port
+      - '33306:3306'  # mysql proxy port
+      - '35432:5432'  # postgres proxy port
+      - '31883:1883'  # mqtt proxy port
+      - '35672:5672'  # amqp091 proxy port
+      - '36672:6672'  # mongodb proxy port
+      - '30080:80'    # http rewrite port
+      - '30443:443'   # https rewrite port
+      - '39000:9000'  # proxy port
+    depends_on:
+      real_mysql_server:
+        condition: service_started
+      java-real_mqtt_server:
+        condition: service_started
+      real_postgres_server:
+        condition: service_started
+      real_amqp091_server:
+        condition: service_started
+      real_mongodb_server:
+        condition: service_started
+      real_redis_server:
+        condition: service_started
+  real_mongodb_server:
+    image: mongo:6-jammy
+    hostname: "real_mongodb_server"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: login
+      MONGO_INITDB_ROOT_PASSWORD: password
+    ports:
+      - '27017:27017'
+  real_mysql_server:
+    build:
+      context: MySQL/.
+      dockerfile: Dockerfile
+    hostname: "real_mysql_server"
+    image: "real_mysql_server"
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'db'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+      - '23306:3306'
+  real_amqp091_server:
+    image: "rabbitmq:3-management"
+    hostname: "real_amqp091_server"
+    ports:
+      - '25672:5672'
+    environment:
+      RABBITMQ_DEFAULT_USER: root
+      RABBITMQ_DEFAULT_PASS: password
+  real_redis_server:
+    image: "redis:6.2-alpine"
+    hostname: "real_redis_server"
+    restart: always
+    ports:
+      - '26379:6379'
+    command: redis-server --save 20 1 --loglevel warning
+  real_mqtt_server:
+    build:
+      context: Mosquitto/.
+      dockerfile: Dockerfile
+    image: "real_mqtt_server"
+    hostname: "real_mqtt_server"
+    ports:
+      - '21883:1883'
+  real_postgres_server:
+    build:
+      context: Postgres/.
+      dockerfile: Dockerfile
+    hostname: "real_postgres_server"
+    image: "real_postgres_server"
+    restart: always
+    environment:
+      POSTGRES_DB: 'db'
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: 'password'
+    ports:
+      - '25432:5432'
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 1s
+      timeout: 5s
+      retries: 10
