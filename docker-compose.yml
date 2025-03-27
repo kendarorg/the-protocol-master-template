@@ -1,12 +1,12 @@
 
 services:
   # TPM Application
-  main-tpm:
+  main_tpm:
     build:
       context: Tpm/.
       dockerfile: Dockerfile
-    image: "main-tpm"
-    hostname: "main-tpm"
+    image: "main_tpm"
+    hostname: "main_tpm"
     ports:
       - '35005:5005'  # debug port
       - '38081:8081'  # admin api port
@@ -23,7 +23,7 @@ services:
     depends_on:
       real_mysql_server:
         condition: service_started
-      java-real_mqtt_server:
+      real_mqtt_server:
         condition: service_started
       real_postgres_server:
         condition: service_started
